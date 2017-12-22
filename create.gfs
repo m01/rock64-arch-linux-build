@@ -1,0 +1,57 @@
+# create partition table
+# see:
+# - http://opensource.rock-chips.com/wiki_Partitions
+# - https://github.com/ayufan-rock64/linux-build/tree/master/build
+part-init /dev/sda gpt
+part-add /dev/sda p 0x40 0x1f7f
+part-set-name /dev/sda 1 loader1
+part-add /dev/sda p 0x1f80 0x1fff
+part-set-name /dev/sda 2 reserved1
+part-add /dev/sda p 0x2000 0x3fff
+part-set-name /dev/sda 3 reserved2
+part-add /dev/sda p 0x4000 0x5fff
+part-set-name /dev/sda 4 loader2
+part-add /dev/sda p 0x6000 0x7fff
+part-set-name /dev/sda 5 atf
+part-add /dev/sda p 0x8000 0x3ffff
+part-set-name /dev/sda 6 boot
+part-add /dev/sda p 0x40000 -128
+# MS Basic Data Partition
+part-set-gpt-type /dev/sda 6 EBD0A0A2-B9E5-4433-87C0-68B6B72699C7
+# u-boot will filter/scan for bootable partitions
+part-set-bootable /dev/sda 6 true
+
+part-set-name /dev/sda 7 linux-root
+# set aarch64 root partition type
+part-set-gpt-type /dev/sda 7 B921B045-1DF0-41C3-AF44-4C6F280D3FAE
+
+# Format
+# NB: We should really be specifying the vfat sector size, but guestfish thinks the -S command is only allowed for mkfs.ufs.
+# it looks like 512 is the default anyway though, so I think we're OK: https://github.com/dosfstools/dosfstools/blob/5cdad55563e9efbeacb0413e8a01e4c89727ff5a/src/mkfs.fat.c#L223
+# specify file system labels
+mkfs vfat /dev/sda6 label:boot
+mke2fs /dev/sda7 fstype:ext4 label:linux-root
+
+list-filesystems
+
+# Setup boot, root filesystems
+mount /dev/sda7 /
+mkdir-p /boot
+mount /dev/sda6 /boot
+tar-in ArchLinuxARM-aarch64-latest.tar.gz / compress:gzip xattrs:true selinux:true acls:true
+
+upload -<<SECURETTY_EOF /etc/securetty
+# Rock64
+ttyFIQ0
+SECURETTY_EOF
+write-append /etc/fstab "LABEL=boot /boot vfat defaults 0 0"
+
+#cp /boot/Image /boot/efi/
+#cp /boot/initramfs-linux.img /boot/efi/initrd.img
+#cp /boot/dtbs/rockchip/rk3328-rock64.dtb /boot/efi/dtb
+
+mkdir-p /boot/extlinux
+copy-in files/extlinux.conf /boot/extlinux
+
+# copy out/u-boot/idbloader.img into loader1 partition at offset 0x40
+copy-device-to-device /dev/sdb /dev/sda1

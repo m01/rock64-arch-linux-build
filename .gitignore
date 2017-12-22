@@ -1,0 +1,12 @@
+ArchLinuxARM-aarch64-latest.tar.gz
+# other repos
+arm-trusted-firmware
+u-boot
+rkbin
+# supporting stuff
+u-boot-venv
+# build
+out
+arch.img
+arch.img.xz
+
