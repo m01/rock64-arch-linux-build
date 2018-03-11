@@ -1,9 +1,11 @@
 UBOOT_DEFCONFIG ?= rock64-rk3328_defconfig
 UBOOT_DIR ?= u-boot
 PYTHON ?= python2
+ATF_PLAT ?= rk3328
+BOARD_TARGET=rock64
 
-arch.img: sync u-boot-venv ArchLinuxARM-aarch64-latest.tar.gz out/u-boot/idbloader.img
-	guestfish -N arch.img=disk:2048M -a out/u-boot/idbloader.img --rw -f create.gfs
+arch.img: sync u-boot-venv ArchLinuxARM-aarch64-latest.tar.gz out/u-boot-rock64/idbloader.img
+	guestfish -N arch.img=disk:2048M -a out/u-boot-rock64/idbloader.img --rw -f create.gfs
 
 arch.img.xz: arch.img
 	xz $<
