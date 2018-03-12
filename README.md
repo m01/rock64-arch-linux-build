@@ -25,6 +25,8 @@ And one of the following toolchains for cross-compilation (see issue #3):
 OR:
 * ARMv8 pre-built toolchain from https://archlinuxarm.org/wiki/Distcc_Cross-Compiling
 
+Ensure the `TOOLCHAIN` variable in the `Makefile` is set appropriately.
+
 Then:
 ```
 make [arch.img]
