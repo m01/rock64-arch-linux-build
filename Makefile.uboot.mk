@@ -1,12 +1,12 @@
 UBOOT_OUTPUT_DIR ?= $(CURDIR)/tmp/u-boot-$(BOARD_TARGET)
 UBOOT_LOADER ?= out/u-boot-$(BOARD_TARGET)/idbloader.img
 UBOOT_MAKE ?= make -C $(UBOOT_DIR) KBUILD_OUTPUT=$(UBOOT_OUTPUT_DIR) BL31=$(realpath $(BL31)) \
-	CROSS_COMPILE="ccache aarch64-linux-gnu-"
+	CROSS_COMPILE="$(TOOLCHAIN)"
 
-tmp/u-boot-$(BOARD_TARGET)/.config: $(UBOOT_DIR)/configs/$(UBOOT_DEFCONFIG)
-	$(UBOOT_MAKE) $(UBOOT_DEFCONFIG) 
+tmp/u-boot-$(BOARD_TARGET)/.config: $(UBOOT_DIR)/configs/$(UBOOT_DEFCONFIG) u-boot-venv u-boot
+	$(UBOOT_MAKE) $(UBOOT_DEFCONFIG)
 
-$(UBOOT_LOADER): tmp/u-boot-$(BOARD_TARGET)/.config $(BL31)
+$(UBOOT_LOADER): tmp/u-boot-$(BOARD_TARGET)/.config $(BL31) u-boot-venv u-boot
 	$(UBOOT_MAKE) -j $$(nproc)
 	$(UBOOT_MAKE) -j $$(nproc) u-boot.itb
 	mkdir -p out/u-boot-$(BOARD_TARGET)
@@ -29,14 +29,14 @@ endif
 	mv $@.tmp $@
 
 .PHONY: u-boot-menuconfig		# edit u-boot config and save as defconfig
-u-boot-menuconfig:
+u-boot-menuconfig: u-boot-venv u-boot
 	$(UBOOT_MAKE) ARCH=arm64 $(UBOOT_DEFCONFIG)
 	$(UBOOT_MAKE) ARCH=arm64 menuconfig
 	$(UBOOT_MAKE) ARCH=arm64 savedefconfig
 	mv $(UBOOT_OUTPUT_DIR)/defconfig $(UBOOT_DIR)/configs/$(UBOOT_DEFCONFIG)
 
 .PHONY: u-boot-build		# compile u-boot
-u-boot-build:
+u-boot-build: u-boot-venv u-boot
 	rm -f $(UBOOT_LOADER)
 	make $(UBOOT_LOADER)
 
@@ -44,16 +44,16 @@ u-boot-build:
 u-boot-clear:
 	rm -rf $(UBOOT_LOADER)/..
 
-out/u-boot/%/boot.scr: blobs/%.cmd
+out/u-boot/%/boot.scr: blobs/%.cmd u-boot-venv u-boot
 	mkdir -p $$(dirname $@)
 	mkimage -C none -A arm -T script -d $< $@
 
-out/u-boot/%/boot.img: out/u-boot/%/boot.scr
+out/u-boot/%/boot.img: out/u-boot/%/boot.scr u-boot-venv u-boot
 	dd if=/dev/zero of=$@ bs=1M count=2
 	mkfs.vfat -n "u-boot-script" $@
 	mcopy -sm -i $@ $< ::
 
-u-boot-%-$(BOARD_TARGET).img: out/u-boot/%/boot.img $(UBOOT_LOADER)
+u-boot-%-$(BOARD_TARGET).img: out/u-boot/%/boot.img $(UBOOT_LOADER) u-boot-venv u-boot
 	build/mk-image.sh -c $(BOARD_CHIP) -d out/u-boot-$(BOARD_TARGET) -t system -s 128 -b $< -o "$@.tmp"
 	mv "$@.tmp" $@
 
