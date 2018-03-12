@@ -12,13 +12,18 @@ Build procedure
 This is written from the perspective of someone building the image on Arch Linux x86_64.
 
 Install the following prerequisites (mostly required for building u-boot):
-* `aarch64-linux-gnu-gcc`
-* `guestfish`
-* `dtc`
+* `guestfish` (part of `libguestfs` package)
+* `dtc` version `1.4.5-1`
 * `git`
 * `uboot-tools`
 * `swig`
 * `make`
+
+And one of the following toolchains for cross-compilation (see issue #3):
+* `aarch64-linux-gnu-gcc`, and
+* `aarch64-linux-gnu-binutils` version `2.29.1-1` (tested) or `>=2.31` (presumed). `2.30` does not work, see the issue mentioned above.
+OR:
+* ARMv8 pre-built toolchain from https://archlinuxarm.org/wiki/Distcc_Cross-Compiling
 
 Then:
 ```
@@ -55,3 +60,4 @@ Credits
 * Rockchip for caring about mainline support for their chips
 * Arch Linux ARM for the distribution
 * [Arch Linux Wiki page on banana pi](https://wiki.archlinux.org/index.php/Banana_Pi) for a pointer on fixing python library loading issues when building u-boot
+* Everyone who's reported issues and helped me fix them!
