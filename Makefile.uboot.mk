@@ -1,7 +1,7 @@
 UBOOT_OUTPUT_DIR ?= $(CURDIR)/tmp/u-boot-$(BOARD_TARGET)
 UBOOT_LOADER ?= out/u-boot-$(BOARD_TARGET)/idbloader.img
 UBOOT_MAKE ?= make -C $(UBOOT_DIR) KBUILD_OUTPUT=$(UBOOT_OUTPUT_DIR) BL31=$(realpath $(BL31)) \
-	CROSS_COMPILE="/x-tools8/aarch64-unknown-linux-gnueabi/bin/aarch64-unknown-linux-gnueabi-"
+	CROSS_COMPILE="$(TOOLCHAIN)"
 
 tmp/u-boot-$(BOARD_TARGET)/.config: $(UBOOT_DIR)/configs/$(UBOOT_DEFCONFIG)
 	$(UBOOT_MAKE) $(UBOOT_DEFCONFIG) 
