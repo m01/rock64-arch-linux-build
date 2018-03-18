@@ -7,9 +7,9 @@ This code will build a pretty "vanilla" Arch Linux ARM image for the Rock64 Sing
 
 It builds u-boot using ayufan's scripts (from https://github.com/ayufan-rock64/linux-build/, https://github.com/ayufan-rock64/linux-u-boot/). Then, it use guestfish to create an empty image, partition it as required by the RK3328, format the `boot` and `linux-root` partitions, and extract the [Arch Linux ARM ARMv8 generic](https://archlinuxarm.org/platforms/armv8/generic) tarball into the image. It will then add the u-boot bootloader, extlinux config with the kernel command line args and fix the serial console.
 
-Build procedure
----------------
-This is written from the perspective of someone building the image on Arch Linux x86_64.
+Build procedure (native)
+------------------------
+This is written from the perspective of someone building the image on Arch Linux x86_64. See below for Dockerised version.
 
 Install the following prerequisites (mostly required for building u-boot):
 * `guestfish` (part of `libguestfs` package)
@@ -32,8 +32,19 @@ Then:
 make [arch.img]
 ```
 
-Usage
------
+Build procedure (using Docker)
+------------------------------
+
+1. Build docker image
+2. Build Arch Linux Rock64 image
+
+```
+./docker/build-docker-image.sh
+./docker/build-rock64-image.sh
+```
+
+Rock64 image usage
+------------------
 Burn image to sdcard or eMMC. Boot.
 
 username/password: `alarm`/`alarm`
@@ -62,4 +73,5 @@ Credits
 * Rockchip for caring about mainline support for their chips
 * Arch Linux ARM for the distribution
 * [Arch Linux Wiki page on banana pi](https://wiki.archlinux.org/index.php/Banana_Pi) for a pointer on fixing python library loading issues when building u-boot
+* picodotdev for setting up a Dockerfile & associated scripts for building the rock64 image
 * Everyone who's reported issues and helped me fix them!
