@@ -9,6 +9,11 @@ It builds u-boot using ayufan's scripts (from https://github.com/ayufan-rock64/l
 
 Note that these days you can find [Rock64 installation instructions on the official Arch Linux ARM website](https://archlinuxarm.org/platforms/armv8/rockchip/rock64), so you may prefer to use those. The Rock64 was not explitly supported by Arch Linux ARM when I got mine, which is [how this repo came into existence](https://me.m01.eu/blog/2017/12/rock64-arch-linux/). Perhaps it's still useful for people who want to build their own images :slightly_smiling_face:.
 
+Build procedure
+---------------
+
+You can either build this using packages installed in your Linux system, or using Docker.
+
 Build procedure (native)
 ------------------------
 This is written from the perspective of someone building the image on Arch Linux x86_64. See below for Dockerised version.
