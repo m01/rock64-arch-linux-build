@@ -1,19 +1,21 @@
 FROM archlinux/base:latest
 
-RUN echo "" >> /etc/pacman.conf && \
-    echo "[archlinuxfr]" >> /etc/pacman.conf && \
-    echo "SigLevel=Optional TrustAll" >> /etc/pacman.conf && \
-    echo "Server=http://repo.archlinux.fr/\$arch" >> /etc/pacman.conf
+RUN pacman -Syu --noconfirm && pacman -S --noconfirm base-devel aarch64-linux-gnu-gcc dtc git uboot-tools swig openssh python-virtualenv && rm -rf /var/cache/pacman/pkg/
 
-RUN pacman -Syu --noconfirm
-RUN pacman -S --noconfirm base-devel aarch64-linux-gnu-gcc dtc git uboot-tools swig openssh python-virtualenv yaourt 
-
-# Downgrade to previous versions (see issue #3)
-RUN pacman -U --noconfirm https://archive.archlinux.org/packages/d/dtc/dtc-1.4.5-1-x86_64.pkg.tar.xz https://archive.archlinux.org/packages/a/aarch64-linux-gnu-binutils/aarch64-linux-gnu-binutils-2.29.1-1-x86_64.pkg.tar.xz
-
+# non-root user for builds
 RUN useradd -m -G wheel -s /bin/bash rock64
 RUN sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
-RUN su - rock64 -c "yaourt -Sy --noconfirm --needed libguestfs"
+
+# build libguestfs and its hivex dependency
+RUN cd /tmp; git clone https://aur.archlinux.org/libguestfs.git && \
+  git clone https://aur.archlinux.org/hivex.git && \
+  chown -R rock64 /tmp/hivex /tmp/libguestfs && \
+  su - rock64 -c "cd /tmp/hivex; makepkg -cs --noconfirm" && pacman -U --noconfirm hivex/hivex-*.xz && \
+  su - rock64 -c "cd /tmp/libguestfs; makepkg -cs --noconfirm" && pacman -U --noconfirm libguestfs/libguestfs-*.xz && \
+  rm -rf hivex libguestfs /var/cache/pacman/pkg/
+
+# Downgrade to previous versions (see issue #3 and README.md)
+RUN pacman -U --noconfirm https://archive.org/download/archlinux_pkg_dtc/dtc-1.4.5-1-x86_64.pkg.tar.xz
 
 VOLUME ["/rock64-arch-linux-build"]
 

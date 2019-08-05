@@ -7,6 +7,13 @@ This code will build a pretty "vanilla" Arch Linux ARM image for the Rock64 Sing
 
 It builds u-boot using ayufan's scripts (from https://github.com/ayufan-rock64/linux-build/, https://github.com/ayufan-rock64/linux-u-boot/). Then, it use guestfish to create an empty image, partition it as required by the RK3328, format the `boot` and `linux-root` partitions, and extract the [Arch Linux ARM ARMv8 generic](https://archlinuxarm.org/platforms/armv8/generic) tarball into the image. It will then add the u-boot bootloader, extlinux config with the kernel command line args and fix the serial console.
 
+Note that these days you can find [Rock64 installation instructions on the official Arch Linux ARM website](https://archlinuxarm.org/platforms/armv8/rockchip/rock64), so you may prefer to use those. The Rock64 was not explitly supported by Arch Linux ARM when I got mine, which is [how this repo came into existence](https://me.m01.eu/blog/2017/12/rock64-arch-linux/). Perhaps it's still useful for people who want to build their own images :slightly_smiling_face:.
+
+Build procedure
+---------------
+
+You can either build this using packages installed in your Linux system, or using Docker.
+
 Build procedure (native)
 ------------------------
 This is written from the perspective of someone building the image on Arch Linux x86_64. See below for Dockerised version.
@@ -14,6 +21,7 @@ This is written from the perspective of someone building the image on Arch Linux
 Install the following prerequisites (mostly required for building u-boot):
 * `guestfish` (part of `libguestfs` package)
 * `dtc` version `1.4.5-1`
+** You can either build this yourself, or find it in the [Arch Linux Historical Archive](https://wiki.archlinux.org/index.php/Arch_Linux_Archive#Historical_Archive) and install it using `pacman -U https://archive.org/download/archlinux_pkg_dtc/dtc-1.4.5-1-x86_64.pkg.tar.xz`)
 * `git`
 * `uboot-tools`
 * `swig`
@@ -21,7 +29,7 @@ Install the following prerequisites (mostly required for building u-boot):
 
 And one of the following toolchains for cross-compilation (see issue #3):
 * `aarch64-linux-gnu-gcc`, and
-* `aarch64-linux-gnu-binutils` version `2.29.1-1` (tested) or `>=2.31` (presumed). `2.30` does not work, see the issue mentioned above.
+* `aarch64-linux-gnu-binutils` version `>=2.31` (presumed) or `2.29.1-1` (tested). `2.30` does not work, see the issue mentioned above.
 OR:
 * ARMv8 pre-built toolchain from https://archlinuxarm.org/wiki/Distcc_Cross-Compiling
 
