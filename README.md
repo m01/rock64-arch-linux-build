@@ -14,6 +14,7 @@ This is written from the perspective of someone building the image on Arch Linux
 Install the following prerequisites (mostly required for building u-boot):
 * `guestfish` (part of `libguestfs` package)
 * `dtc` version `1.4.5-1`
+** You can either build this yourself, or find it in the [Arch Linux Historical Archive](https://wiki.archlinux.org/index.php/Arch_Linux_Archive#Historical_Archive) and install it using `pacman -U https://archive.org/download/archlinux_pkg_dtc/dtc-1.4.5-1-x86_64.pkg.tar.xz`)
 * `git`
 * `uboot-tools`
 * `swig`
@@ -21,7 +22,7 @@ Install the following prerequisites (mostly required for building u-boot):
 
 And one of the following toolchains for cross-compilation (see issue #3):
 * `aarch64-linux-gnu-gcc`, and
-* `aarch64-linux-gnu-binutils` version `2.29.1-1` (tested) or `>=2.31` (presumed). `2.30` does not work, see the issue mentioned above.
+* `aarch64-linux-gnu-binutils` version `>=2.31` (presumed) or `2.29.1-1` (tested). `2.30` does not work, see the issue mentioned above.
 OR:
 * ARMv8 pre-built toolchain from https://archlinuxarm.org/wiki/Distcc_Cross-Compiling
 
