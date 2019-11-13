@@ -22,7 +22,7 @@ arm-trusted-firmware:
 u-boot:
 	# poor man's XML parser ;-)
 	BRANCH=$$(curl -s https://raw.githubusercontent.com/ayufan-rock64/linux-manifests/default/default.xml | grep linux-u-boot | egrep -o  'revision=\"([^\"]+)\"' | cut -d'"' -f2); \
-	git clone --branch $$BRANCH https://github.com/ayufan-rock64/linux-u-boot.git u-boot; \
+	git clone --depth=1 --branch $$BRANCH https://github.com/ayufan-rock64/linux-u-boot.git u-boot; \
 	sed -i 's/#!\/usr\/bin.*python[2]*/#!\/usr\/bin\/env python2/' $$(egrep -l '#\!.*python' -r u-boot | grep -v -i README)
 	# ^ fix interpreter.. but even that's not enough
 
