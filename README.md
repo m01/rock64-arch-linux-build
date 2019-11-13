@@ -26,6 +26,7 @@ Install the following prerequisites (mostly required for building u-boot):
 * `uboot-tools`
 * `swig`
 * `make`
+* `python-virtualenv`
 
 And one of the following toolchains for cross-compilation (see issue #3):
 * `aarch64-linux-gnu-gcc`, and
