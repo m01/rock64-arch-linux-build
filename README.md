@@ -41,6 +41,8 @@ Then:
 make [arch.img]
 ```
 
+See Troubleshooting section if this doesn't work.
+
 Build procedure (using Docker)
 ------------------------------
 
@@ -64,6 +66,15 @@ When using SSH, login as `alarm` first, then `su root`.
 Known/potential issues
 ------------
 * If you suffer from network performance issues, [try disabling rx and tx pauses using ethtool](https://github.com/ayufan-rock64/linux-build/blob/master/package/root/etc/network/if-up.d/rock64-offload)
+
+Troubleshooting builds
+------------
+
+If you run into the following error while building u-boot:
+```
+/bin/sh: scripts/basic/fixdep: cannot execute binary file: Exec format error
+```
+.. then `gcc` is likely pointing at your aarch64 compiler. Fix your `PATH` etc. If using the ARMv8 pre-built toolchain from https://archlinuxarm.org/wiki/Distcc_Cross-Compiling, then you may notice that their `bin` directory contains symlinks for `gcc` etc.
 
 Things to do
 ------------
