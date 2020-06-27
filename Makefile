@@ -14,7 +14,7 @@ arch.img.xz: arch.img
 	xz $<
 
 ArchLinuxARM-aarch64-latest.tar.gz:
-	curl -LO http://archlinuxarm.org/os/ArchLinuxARM-aarch64-latest.tar.gz
+	curl -LO https://archlinuxarm.org/os/ArchLinuxARM-aarch64-latest.tar.gz
 
 arm-trusted-firmware:
 	git clone https://github.com/ARM-software/arm-trusted-firmware.git
