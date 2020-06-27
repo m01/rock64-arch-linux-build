@@ -84,4 +84,5 @@ Credits
 * [Arch Linux Wiki page on banana pi](https://wiki.archlinux.org/index.php/Banana_Pi) for a pointer on fixing python library loading issues when building u-boot
 * picodotdev for setting up a Dockerfile & associated scripts for building the rock64 image
 * chlorophyll-zz for speeding up the build process and finding a missing dependency
+* ydirson for finding the fix for a build issue
 * Everyone who's reported issues and helped me fix them!
