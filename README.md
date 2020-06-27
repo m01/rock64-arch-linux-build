@@ -64,6 +64,7 @@ When using SSH, login as `alarm` first, then `su root`.
 Known/potential issues
 ------------
 * If you suffer from network performance issues, [try disabling rx and tx pauses using ethtool](https://github.com/ayufan-rock64/linux-build/blob/master/package/root/etc/network/if-up.d/rock64-offload)
+* HDMI appears to work but I do not think it is hardware accelerated
 
 Things to do
 ------------
