@@ -23,8 +23,10 @@ u-boot:
 	# poor man's XML parser ;-)
 	BRANCH=$$(curl -s https://raw.githubusercontent.com/ayufan-rock64/linux-manifests/default/default.xml | grep linux-u-boot | egrep -o  'revision=\"([^\"]+)\"' | cut -d'"' -f2); \
 	git clone --depth=1 --branch $$BRANCH https://github.com/ayufan-rock64/linux-u-boot.git u-boot; \
+	sed -i 's!$$(obj)/helloworld.so: $$(EFI_LDS_PATH)!!' u-boot/scripts/Makefile.lib; \
 	sed -i 's/#!\/usr\/bin.*python[2]*/#!\/usr\/bin\/env python2/' $$(egrep -l '#\!.*python' -r u-boot | grep -v -i README)
-	# ^ fix interpreter.. but even that's not enough
+	# ^ fix interpreter.. but even that's not enoughi
+	# helloworld.so fix in line above is effectively implementing d6507e6fd9e0a6f1a8dd28c18cd320c1f861269e in upstream u-boot to fix issue #17 in this repo
 
 u-boot-venv:
 	virtualenv -p python2 u-boot-venv
